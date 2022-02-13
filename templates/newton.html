@@ -1,0 +1,81 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  
+  <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Phương Pháp Newton</h1>
+    <p class="lead">Phương pháp của Newton là một thuật toán để ước tính các nghiệm thực sự của một phương trình. Bắt đầu với phương pháp xấp xỉ x1, quá trình sử dụng đạo hàm của hàm số theo ước tính để tạo một đường tiếp tuyến đi qua trục để tạo ra giá trị xấp xỉ tiếp theo.</p>
+  </div>
+
+  <div class="input-group mb-3">
+    <form action="{{url_for("newton")}}" method="post">
+      <div class="container">
+        <div class="row">
+          <h3 class="display-6">Nhập hàm</h3>
+          <p>Dấu x và : thay bằng * và /, mũ lũy thừa là **, căn bậc n là **(1/n), số pi là pi, log sẽ là log(x, a) với a là cơ số, arctan là atan (ví dụ: 2.26*e**(-x) -2.89*x + cos(x+1)</p>
+          <input type="text" name="func" value="{{func}}">
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <h3 class="display-6">Nhập a</h3>
+            <input type="text" name="a" value="{{a}}">
+          </div>
+          <div class="col-sm">
+            <h3 class="display-6">Nhập b</h3>
+            <input type="text" name="b" value="{{b}}">
+          </div>
+          <div class="col-sm">
+            <h3 class="display-6">Nhập m</h3>
+            <input type="text" name="m" value="{{m}}">
+          </div>
+          <div class="col-sm">
+            <h3 class="display-6">Nhập x0</h3>
+            <input type="text" name="x" value="{{x}}">
+          </div>
+          <div class="col-sm">
+            <h3 class="display-6">Nhập n</h3>
+            <input type="text" name="n" value="{{n}}">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <p>Sau khi nhập hàm và a, b có thể bấm nút này để tìm m và x0 theo điều kiện Fourier</p>
+            <p>Đủ điều kiện: {{dk}}</p>
+            <button class="btn btn-outline-secondary" type="submit">Tìm x0 và m</button>
+          </div>
+          </div>
+        <div class="row"><br></div>
+        <div class="row">
+          <div class="col-sm">
+            <button type="submit" class="btn btn-primary mb-3">Giải</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div>
+    <h3 class="display-6">Đáp án</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Xn-1</th>
+          <th scope="col">Xn</th>
+          <th scope="col">Sai số</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for val in res %}
+          <tr>
+            <th scope="row">{{loop.index - 1}}</th>
+            {% for j in range(3) %}
+              <td>{{val[j]}}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+{% endblock %}

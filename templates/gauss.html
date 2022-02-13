@@ -1,0 +1,94 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  
+  <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+      <h1 class="display-4">Phương Pháp Gauss-Seidel</h1>
+      <p class="lead">Phương pháp lặp Jacobi được coi là một thuật toán lặp được sử dụng để xác định các nghiệm của hệ phương trình tuyến tính trong đại số tuyến tính số , chiếm ưu thế theo đường chéo. Trong phương pháp này, một giá trị gần đúng được điền vào cho mỗi phần tử đường chéo. Cho đến khi nó hội tụ, quá trình được lặp lại. Thuật toán này lần đầu tiên được gọi là quá trình biến đổi Jacobi của đường chéo hóa ma trận.</p>
+  </div>
+
+  <div class="input-group mb-3">
+    <form action="{{url_for("gauss")}}" method="post">
+      <h3 class="display-6">Nhập số ẩn</h3>
+      <input type="text" name="level" value="{{level}}">
+      <button class="btn btn-outline-secondary" type="submit">Ok</button>
+      <div>
+        <h3 class="display-6">Nhập ma trận</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              {% for i in range(level|int) %}
+                <th scope="col">x{{i+1}}</th>
+              {% endfor %}
+              <th scope="col">C</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in range(level|int) %}
+              <tr>
+                {% for j in range(level|int) %}
+                  <td><input type="text" step="0.0001" name="{{i|string + '-' + j|string}}" value="{{B[i][j]}}"></td>
+                {% endfor %}
+                <td><input type="text" step="0.0001" name="{{i|string + '-C'}}" value="{{C[i][0]}}"></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3 class="display-6">Nhập x0</h3>
+        <table class="table">
+          <tbody>
+            <tr>
+              {% for i in range(level|int) %}
+                <td><input type="text" step="0.0001" name="{{i|string + '-O'|string}}" value="{{X[i][0]}}"></td>
+              {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3 class="display-6">Nhập số lần lặp</h3>
+        <input type="text" name="n" value="{{n}}">
+      </div>
+      <button type="submit" class="btn btn-primary mb-3">Giải</button>
+    </form>
+  </div>
+ <div>
+   <h3 class="display-6">Đáp án</h3>
+   <p>X</p>
+   <table class="table">
+    <tbody>
+      {% for val in Xr %}
+        <tr>
+          <th scope="row">x{{loop.index - 1}}</th>
+          {% for j in range(level|int) %}
+            <td>{{val[j][0]}}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+   </table>
+  <table class="table">
+    <tbody>
+      <tr>
+        <th scope="row">Tiên nghiệm chuẩn một</th>
+        <td>{{ss[0]}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Tiên nghiệm chuẩn vô cùng</th>
+        <td>{{ss[1]}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Hậu nghiệm chuẩn một</th>
+        <td>{{ss[2]}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Hậu nghiệm chuẩn vô cùng</th>
+        <td>{{ss[3]}}</td>
+      </tr>
+    </tbody>
+  </table>
+ </div>
+
+{% endblock %}

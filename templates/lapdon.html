@@ -1,0 +1,81 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  
+  <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Phương Pháp Lặp Đơn</h1>
+    <p class="lead">####.</p>
+  </div>
+
+  <div class="input-group mb-3">
+    <form action="{{url_for("lapdon")}}" method="post">
+      <div class="container">
+        <div class="row">
+          <h3 class="display-6">Nhập hàm</h3>
+          <p>Dấu x và : thay bằng * và /, mũ lũy thừa là **, căn bậc n là **(1/n), số pi là pi, log sẽ là log(x, a) với a là cơ số , arctan là atan (ví dụ: 2.26*e**(-x) -2.89*x + cos(x+1)</p>
+          <input type="text" name="func" value="{{func}}">
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <h3 class="display-6">Nhập a</h3>
+            <input type="text" name="a" value="{{a}}">
+          </div>
+          <div class="col-sm">
+            <h3 class="display-6">Nhập b</h3>
+            <input type="text" name="b" value="{{b}}">
+          </div>
+          <div class="col-sm">
+            <h3 class="display-6">Nhập q</h3>
+            <input type="text" name="q" value="{{q}}">
+          </div>
+          <div class="col-sm">
+            <h3 class="display-6">Nhập x0</h3>
+            <input type="text" name="x" value="{{x}}">
+          </div>
+          <div class="col-sm">
+            <h3 class="display-6">Nhập n</h3>
+            <input type="text" name="n" value="{{n}}">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <p>Sau khi nhập hàm và a, b có thể bấm nút này để tìm q</p>
+            <button class="btn btn-outline-secondary" type="submit">Tính hệ số co q</button>
+          </div>
+          </div>
+        <div class="row"><br></div>
+        <div class="row">
+          <div class="col-sm">
+            <button type="submit" class="btn btn-primary mb-3">Giải</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div>
+    <h3 class="display-6">Đáp án</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">x</th>
+          <th scope="col">f(x)</th>
+          <th scope="col">Sai số hậu n0</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for val in res %}
+          <tr>
+            <th scope="row">{{loop.index - 1}}</th>
+            {% for j in range(3) %}
+              <td>{{val[j]}}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p>Sai số tiên nghiệm: {{sst}}</p>
+  </div>
+
+{% endblock %}

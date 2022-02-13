@@ -1,0 +1,73 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  
+  <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Phương Pháp Chia Đôi</h1>
+    <p class="lead">Thu hẹp dần khoảng phân li nghiệm bằng cách chia đôi<br>
+
+    Cho phương trình f(x) = 0, f(x) liên tục và trái dấu tại 2 đầu [a,b]. Giả sử f(a) < 0, f(b) < 0 (nếu ngược lại thì xét –f(x)=0 ). Theo định lý 1, trên [a,b] phương trình có ít nhất 1 nghiệm µ.<br>
+
+    Để tìm nghiệm gần đúng c, ta thực hiện một số hữu hạn lần quá trình lặp các bước sau đây: Bước 1: Ta chọn c là điểm chính giữa của đoạn [a, b] c = (a + b) / 2 Bước 2: Nếu f(c) = 0 thì ta khẳng định ngay c là nghiệm cần tìm và chuyển sang bước 4, ngược lại chuyển sang bước 3. Bước 3: Nếu f(a)f(c) < 0 thì ta đặt lại b = c và quay về bước 1. Còn nếu f(a)f(c) > 0 thì đặt lại a=c rồi cũng quay về bước 1. Bước 4: Thông báo nghiệm c tìm được và kết thúc công việc tìm nghiệm của phương trình f(x) = 0. Quá trình trên gọi là phương pháp chia đôi bởi vì cứ mỗi một lần lặp lại từ đầu thì khoảng [a, b] cần xem xét được thu gọn lại chỉ còn một nửa so với lần trước bởi điểm chính giữa c. Quá trình lặp trên cũng dừng lại khi đoạn [a,b] quá ngắn (nhỏ hơn một số dương rất nhỏ nào đó, gọi là sai số).</p>
+    <a href="https://drive.google.com/file/d/1l8JdySJBJQ3UPOyTV_OkL9wT5W81CH4_/view?usp=sharing" target="blank">Tham Khảo</a>
+  </div>
+
+  <div class="input-group mb-3">
+    <form action="{{url_for("chiadoi")}}" method="post">
+      <div class="container">
+        <div class="row">
+          <h3 class="display-6">Nhập hàm</h3>
+          <p>Dấu x và : thay bằng * và /, mũ lũy thừa là **, căn bậc n là **(1/n), số pi là pi, log sẽ là log(x, a) với a là cơ số , arctan là atan (ví dụ: 2.26*e**(-x) -2.89*x + cos(x+1)</p>
+          <input type="text" name="func" value="{{func}}">
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <h3 class="display-6">Nhập a</h3>
+            <input type="text" name="a" value="{{a}}">
+          </div>
+          <div class="col-sm">
+            <h3 class="display-6">Nhập b</h3>
+            <input type="text" name="b" value="{{b}}">
+          </div>
+          <div class="col-sm">
+            <h3 class="display-6">Nhập n</h3>
+            <input type="text" name="n" value="{{n}}">
+          </div>
+        </div>
+        <div class="row"><br></div>
+        <div class="row">
+          <div class="col-sm">
+            <button type="submit" class="btn btn-primary mb-3">Giải</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div>
+    <h3 class="display-6">Đáp án</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">a</th>
+          <th scope="col">b</th>
+          <th scope="col">x</th>
+          <th scope="col">f(x)</th>
+          <th scope="col">Sai số</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for val in res %}
+          <tr>
+            <th scope="row">{{loop.index - 1}}</th>
+            {% for j in range(5) %}
+              <td>{{val[j]}}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+{% endblock %}
