@@ -84,22 +84,20 @@ def Gauss(X, B, C, n):
   Xr = []
   Xr.append(X)
   
-  DL = np.array([
-    [1, 0, 0, 0],
-    [1, 1, 0, 0],
-    [1, 1, 1, 0],
-    [1, 1, 1, 1]
-  ])
+  k = len(B)
+  DL = np.array([[0]*k]*k)
+  U = np.array([[0]*k]*k)
+  for i in range(k):
+    for j in range(k):
+      if j < i+1:
+        DL[i][j] = 1
+        U[i][j] = 0
+      else:
+        DL[i][j] = 0
+        U[i][j] = -1
 
-  U = np.array([
-    [0, -1, -1, -1],
-    [0, 0, -1, -1],
-    [0, 0, 0, -1],
-    [0, 0, 0, 0]
-  ])
-
-  for i in range(len(B)):
-    for j in range(len(B[0])):
+  for i in range(k):
+    for j in range(k):
       DL[i][j] = DL[i][j] * B[i][j]
       U[i][j] = U[i][j] * B[i][j]
 
