@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 from math import sin, cos, tan, sinh, cosh, tanh, asin, acos, atan, pi, e, log
 import sympy as sym
 import numpy as np
@@ -207,6 +207,14 @@ app = Flask('__name__')
 @app.route("/")
 def home():
   return render_template('home.html')
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+    
+@app.route("/icon.png")
+def icon():
+  return send_file(r'templates/includes/icon.png', mimetype='image/png')
 
 @app.route("/newton", methods=['GET', 'POST'])
 def newton():
