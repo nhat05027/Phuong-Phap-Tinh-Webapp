@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Report Bug</h1>
+    <p class="lead"></p>
+</div>
+
+<div>
+    <form action="{{url_for("reportbug")}}" method="post">
+        <div class="container">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                </div>
+                <input type="text" class="form-control" name="name" value="Hảo hán" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+            <div class="mb-3">
+                <label for="validationTextarea" class="form-label">Exeption</label>
+                <textarea class="form-control" name="e">{{e}}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="validationTextarea" class="form-label">Ghi Chú</label>
+                <textarea class="form-control" name="note"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary mb-3">Gửi</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

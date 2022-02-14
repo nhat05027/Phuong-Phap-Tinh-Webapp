@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, send_file
 from math import sin, cos, tan, sinh, cosh, tanh, asin, acos, atan, pi, e, log
 import sympy as sym
 import numpy as np
+import requests
 
 def daoHam(func, xval):
   x = sym.symbols('x')
@@ -149,7 +150,6 @@ def chiaDoi(func, a, b, n):
       else:
         a = x
   return res
-# print(chiaDoi("2.26*e**(-x) -2.89*x + cos(x+1)", -2, 2, 5))
 
 def lapDon(func, a, b, x, q, n):
   res = []
@@ -208,6 +208,20 @@ app = Flask('__name__')
 def home():
   return render_template('home.html')
 
+@app.route("/report", methods=['GET', 'POST'])
+def reportbug():
+  if request.method == 'GET':
+    e = request.args.get('error', type=str)
+    return render_template('report.html', e=e)
+  if request.method == "POST":
+    e = request.form.get("e")
+    note = request.form.get("note")
+    name = request.form.get("name")
+    requests.get(f'https://autocaucaserver.tk/bugreport/getBug.php?name={name}&bug={e}&note={note}')
+    return render_template('thank2rp.html', name=name)
+
+  return render_template('report.html', e="Bug here!")
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
@@ -254,7 +268,7 @@ def newton():
       dk = "NO"
     return render_template('newton.html', func=func, a=a, b=b, n=n, x=x, m=m, res=res, dk=dk)
   except Exception as e:
-    render_template('503.html')
+    return render_template('503.html', e=e)
 
 @app.route("/lapdon", methods=['GET', 'POST'])
 def lapdon():
@@ -283,7 +297,7 @@ def lapdon():
         res, sst = lapDon(func, a, b, x, q, n)
     return render_template('lapdon.html', func=func, a=a, b=b, n=n, x=x, q=q, res=res, sst=sst)
   except Exception as e:
-    render_template('503.html')
+    return render_template('503.html', e=e)
 
 @app.route("/chiadoi", methods=['GET', 'POST'])
 def chiadoi():
@@ -301,7 +315,7 @@ def chiadoi():
       res = chiaDoi(func, a, b, n)
     return render_template('chiadoi.html', func=func, a=a, b=b, n=n, res=res)
   except Exception as e:
-    render_template('503.html')
+    return render_template('503.html', e=e)
   
 @app.route("/jacobi", methods=['GET', 'POST'])
 def jacob():
@@ -335,7 +349,7 @@ def jacob():
         Xr, ss = jacobi(X, B, C, n)
     return render_template('jacobi.html', level=level, B=B, C=C, X=X, n=n, Xr=Xr, ss=ss)
   except Exception as e:
-    render_template('503.html')
+    return render_template('503.html', e=e)
 
 @app.route("/gauss", methods=['GET', 'POST'])
 def gauss():
@@ -369,7 +383,7 @@ def gauss():
         Xr, ss = Gauss(X, B, C, n)
     return render_template('gauss.html', level=level, B=B, C=C, X=X, n=n, Xr=Xr, ss=ss)
   except Exception as e:
-    render_template('503.html')
+    return render_template('503.html', e=e)
 
 if __name__ == "__main__":
   app.debug = True
