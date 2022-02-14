@@ -216,141 +216,160 @@ def page_not_found(e):
 def icon():
   return send_file(r'templates/includes/icon.png', mimetype='image/png')
 
+@app.route("/emoji.png")
+def emoji():
+  return send_file(r'templates/includes/emoji.png', mimetype='image/png')
+
 @app.route("/newton", methods=['GET', 'POST'])
 def newton():
-  func = ""
-  a = 0
-  b = 0
-  n = 0
-  m = 0
-  x = 0
-  isValid = 0
-  res = []
-  if request.method == "POST":
-    if int(request.form.get("n")) == 0:
-      func = request.form.get("func")
-      a = float(request.form.get("a"))
-      b = float(request.form.get("b"))
-      m = findm(func, a, b)
-      x, isValid = dkFourier(func, a, b)
+  try:
+    func = ""
+    a = 0
+    b = 0
+    n = 0
+    m = 0
+    x = 0
+    isValid = 0
+    res = []
+    if request.method == "POST":
+      if int(request.form.get("n")) == 0:
+        func = request.form.get("func")
+        a = float(request.form.get("a"))
+        b = float(request.form.get("b"))
+        m = findm(func, a, b)
+        x, isValid = dkFourier(func, a, b)
+      else:
+        func = request.form.get("func")
+        a = float(request.form.get("a"))
+        b = float(request.form.get("b"))
+        m = float(request.form.get("m"))
+        x = float(request.form.get("x"))
+        n = int(request.form.get("n"))
+        isValid = dkFourier(func, a, b)[1]
+        if isValid == 1:
+          res = Newton(func, a, b, x, m, n)
+    if isValid == 1:
+      dk = "OK"
     else:
-      func = request.form.get("func")
-      a = float(request.form.get("a"))
-      b = float(request.form.get("b"))
-      m = float(request.form.get("m"))
-      x = float(request.form.get("x"))
-      n = int(request.form.get("n"))
-      isValid = dkFourier(func, a, b)[1]
-      if isValid == 1:
-        res = Newton(func, a, b, x, m, n)
-  if isValid == 1:
-    dk = "OK"
-  else:
-    dk = "NO"
-  return render_template('newton.html', func=func, a=a, b=b, n=n, x=x, m=m, res=res, dk=dk)
+      dk = "NO"
+    return render_template('newton.html', func=func, a=a, b=b, n=n, x=x, m=m, res=res, dk=dk)
+  except Exception as e:
+    render_template('503.html')
 
 @app.route("/lapdon", methods=['GET', 'POST'])
 def lapdon():
-  func = ""
-  a = 0
-  b = 0
-  n = 0
-  q = 0
-  x = 0
-  sst = 0
-  res = []
-  if request.method == "POST":
-    if int(request.form.get("n")) == 0:
-      func = request.form.get("func")
-      a = float(request.form.get("a"))
-      b = float(request.form.get("b"))
-      q = timHeSoCo(func, a, b)
-    else:
-      func = request.form.get("func")
-      a = float(request.form.get("a"))
-      b = float(request.form.get("b"))
-      q = float(request.form.get("q"))
-      x = float(request.form.get("x"))
-      n = int(request.form.get("n"))
-      res, sst = lapDon(func, a, b, x, q, n)
-  return render_template('lapdon.html', func=func, a=a, b=b, n=n, x=x, q=q, res=res, sst=sst)
+  try:
+    func = ""
+    a = 0
+    b = 0
+    n = 0
+    q = 0
+    x = 0
+    sst = 0
+    res = []
+    if request.method == "POST":
+      if int(request.form.get("n")) == 0:
+        func = request.form.get("func")
+        a = float(request.form.get("a"))
+        b = float(request.form.get("b"))
+        q = timHeSoCo(func, a, b)
+      else:
+        func = request.form.get("func")
+        a = float(request.form.get("a"))
+        b = float(request.form.get("b"))
+        q = float(request.form.get("q"))
+        x = float(request.form.get("x"))
+        n = int(request.form.get("n"))
+        res, sst = lapDon(func, a, b, x, q, n)
+    return render_template('lapdon.html', func=func, a=a, b=b, n=n, x=x, q=q, res=res, sst=sst)
+  except Exception as e:
+    render_template('503.html')
 
 @app.route("/chiadoi", methods=['GET', 'POST'])
 def chiadoi():
-  func = ""
-  a = 0
-  b = 0
-  n = 0
-  res = []
-  if request.method == "POST":
-    func = request.form.get("func")
-    a = float(request.form.get("a"))
-    b = float(request.form.get("b"))
-    n = int(request.form.get("n"))
-    res = chiaDoi(func, a, b, n)
-  return render_template('chiadoi.html', func=func, a=a, b=b, n=n, res=res)
+  try:
+    func = ""
+    a = 0
+    b = 0
+    n = 0
+    res = []
+    if request.method == "POST":
+      func = request.form.get("func")
+      a = float(request.form.get("a"))
+      b = float(request.form.get("b"))
+      n = int(request.form.get("n"))
+      res = chiaDoi(func, a, b, n)
+    return render_template('chiadoi.html', func=func, a=a, b=b, n=n, res=res)
+  except Exception as e:
+    render_template('503.html')
   
 @app.route("/jacobi", methods=['GET', 'POST'])
 def jacob():
-  B = []
-  C = []
-  X = []
-  n = 0
-  Xr = []
-  ss = [0]*4
-  level = 0
-  if request.method == "POST":
-    level = int(request.form.get("level"))
-    for i in range(level):
-      t = []
-      for j in range(level):
-        t.append(0)
-      B.append(t)
-      C.append([0])
-      X.append([0])
-    if int(request.form.get("n")) == 0:
-      pass
-    else:
+  try:
+    B = []
+    C = []
+    X = []
+    n = 0
+    Xr = []
+    ss = [0]*4
+    level = 0
+    if request.method == "POST":
+      level = int(request.form.get("level"))
       for i in range(level):
         t = []
         for j in range(level):
-          B[i][j] = float(request.form.get(str(i)+'-'+str(j)))
-        C[i][0] = float(request.form.get(str(i)+'-C'))
-        X[i][0] = float(request.form.get(str(i)+'-O'))
-        n = int(request.form.get('n'))
-      Xr, ss = jacobi(X, B, C, n)
-  return render_template('jacobi.html', level=level, B=B, C=C, X=X, n=n, Xr=Xr, ss=ss)
+          t.append(0)
+        B.append(t)
+        C.append([0])
+        X.append([0])
+      if int(request.form.get("n")) == 0:
+        pass
+      else:
+        for i in range(level):
+          t = []
+          for j in range(level):
+            B[i][j] = float(request.form.get(str(i)+'-'+str(j)))
+          C[i][0] = float(request.form.get(str(i)+'-C'))
+          X[i][0] = float(request.form.get(str(i)+'-O'))
+          n = int(request.form.get('n'))
+        Xr, ss = jacobi(X, B, C, n)
+    return render_template('jacobi.html', level=level, B=B, C=C, X=X, n=n, Xr=Xr, ss=ss)
+  except Exception as e:
+    render_template('503.html')
 
 @app.route("/gauss", methods=['GET', 'POST'])
 def gauss():
-  B = []
-  C = []
-  X = []
-  n = 0
-  Xr = []
-  ss = [0]*4
-  level = 0
-  if request.method == "POST":
-    level = int(request.form.get("level"))
-    for i in range(level):
-      t = []
-      for j in range(level):
-        t.append(0)
-      B.append(t)
-      C.append([0])
-      X.append([0])
-    if int(request.form.get("n")) == 0:
-      pass
-    else:
+  try:
+    B = []
+    C = []
+    X = []
+    n = 0
+    Xr = []
+    ss = [0]*4
+    level = 0
+    if request.method == "POST":
+      level = int(request.form.get("level"))
       for i in range(level):
         t = []
         for j in range(level):
-          B[i][j] = float(request.form.get(str(i)+'-'+str(j)))
-        C[i][0] = float(request.form.get(str(i)+'-C'))
-        X[i][0] = float(request.form.get(str(i)+'-O'))
-        n = int(request.form.get('n'))
-      Xr, ss = Gauss(X, B, C, n)
-  return render_template('gauss.html', level=level, B=B, C=C, X=X, n=n, Xr=Xr, ss=ss)
+          t.append(0)
+        B.append(t)
+        C.append([0])
+        X.append([0])
+      if int(request.form.get("n")) == 0:
+        pass
+      else:
+        for i in range(level):
+          t = []
+          for j in range(level):
+            B[i][j] = float(request.form.get(str(i)+'-'+str(j)))
+          C[i][0] = float(request.form.get(str(i)+'-C'))
+          X[i][0] = float(request.form.get(str(i)+'-O'))
+          n = int(request.form.get('n'))
+        Xr, ss = Gauss(X, B, C, n)
+    return render_template('gauss.html', level=level, B=B, C=C, X=X, n=n, Xr=Xr, ss=ss)
+  except Exception as e:
+    render_template('503.html')
 
 if __name__ == "__main__":
   app.debug = True
