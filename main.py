@@ -209,8 +209,12 @@ def lu(A):
   A = scipy.array(A)
   P, L, U = scipy.linalg.lu(A)
 
-  Lc = scipy.linalg.cholesky(A, lower=True)
-  Uc = scipy.linalg.cholesky(A, lower=False)
+  try:
+    Lc = scipy.linalg.cholesky(A, lower=True)
+    Uc = scipy.linalg.cholesky(A, lower=False)
+  except:
+    Lc = []
+    Uc = []
 
   return L, U, Lc, Uc
 
