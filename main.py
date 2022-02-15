@@ -3,6 +3,8 @@ from math import sin, cos, tan, sinh, cosh, tanh, asin, acos, atan, pi, e, log
 import sympy as sym
 import numpy as np
 import requests
+import scipy
+import scipy.linalg
 
 def daoHam(func, xval):
   x = sym.symbols('x')
@@ -203,6 +205,15 @@ def Newton(func, a, b, x, m, n):
     res.append([xo, xt, ss])
   return res
 
+def lu(A):
+  A = scipy.array(A)
+  P, L, U = scipy.linalg.lu(A)
+
+  Lc = scipy.linalg.cholesky(A, lower=True)
+  Uc = scipy.linalg.cholesky(A, lower=False)
+
+  return L, U, Lc, Uc
+
 app = Flask('__name__')
 @app.route("/")
 def home():
@@ -226,13 +237,13 @@ def reportbug():
 def page_not_found(e):
     return render_template('404.html'), 404
     
-@app.route("/icon.png")
-def icon():
-  return send_file(r'templates/includes/icon.png', mimetype='image/png')
+# @app.route("/icon.png")
+# def icon():
+#   return send_file(r'templates/includes/icon.png', mimetype='image/png')
 
-@app.route("/emoji.png")
-def emoji():
-  return send_file(r'templates/includes/emoji.png', mimetype='image/png')
+# @app.route("/emoji.png")
+# def emoji():
+#   return send_file(r'templates/includes/emoji.png', mimetype='image/png')
 
 @app.route("/newton", methods=['GET', 'POST'])
 def newton():
@@ -382,6 +393,31 @@ def gauss():
           n = int(request.form.get('n'))
         Xr, ss = Gauss(X, B, C, n)
     return render_template('gauss.html', level=level, B=B, C=C, X=X, n=n, Xr=Xr, ss=ss)
+  except Exception as e:
+    return render_template('503.html', e=e)
+
+@app.route("/lu-cholesky", methods=['GET', 'POST'])
+def lu_cholesky():
+  try:
+    A = []
+    aL = []
+    aU = []
+    cL = []
+    cU = []
+    level = 0
+    if request.method == "POST":
+      level = int(request.form.get("level"))
+      for i in range(level):
+        t = []
+        for j in range(level):
+          t.append(0)
+        A.append(t)
+      if request.form.get("0-0"):
+        for i in range(level):
+          for j in range(level):
+            A[i][j] = float(request.form.get(str(i)+'-'+str(j)))
+        aL, aU, cL, cU = lu(A)
+    return render_template('lucholesky.html', level=level, A=A, aL=aL, aU=aU, cL=cL, cU=cU,)
   except Exception as e:
     return render_template('503.html', e=e)
 

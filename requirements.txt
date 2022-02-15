@@ -1,5 +1,6 @@
 Flask==2.0.2
 numpy==1.22.2
-sympy==1.9
 requests==2.27.1
+sympy==1.9
+spicy==0.16.0
 gunicorn==20.1.0

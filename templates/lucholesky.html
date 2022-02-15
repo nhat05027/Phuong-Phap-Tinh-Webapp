@@ -1,0 +1,91 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  
+  <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+      <h1 class="display-4">Phương Pháp LU-Cholesky</h1>
+      <p class="lead">####.</p>
+  </div>
+
+  <div class="input-group mb-3">
+    <form action="{{url_for("lu_cholesky")}}" method="post">
+      <h3 class="display-6">Nhập số ẩn</h3>
+      <input type="text" name="level" value="{{level}}">
+      <button class="btn btn-outline-secondary" type="submit">Ok</button>
+      <div>
+        <h3 class="display-6">Nhập ma trận</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              {% for i in range(level|int) %}
+                <th scope="col">x{{i+1}}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in range(level|int) %}
+              <tr>
+                {% for j in range(level|int) %}
+                  <td><input type="text" step="0.0001" name="{{i|string + '-' + j|string}}" value="{{A[i][j]}}"></td>
+                {% endfor %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <button type="submit" class="btn btn-primary mb-3">Giải</button>
+    </form>
+  </div>
+ <div>
+   <h3 class="display-6">Đáp án</h3>
+   <p>L</p>
+   <table class="table">
+    <tbody>
+      {% for i in aL %}
+        <tr>
+          {% for j in i %}
+            <td>{{j}}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+   </table>
+   <p>U</p>
+   <table class="table">
+    <tbody>
+      {% for i in aU %}
+        <tr>
+          {% for j in i %}
+            <td>{{j}}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+   </table>
+   <p>B</p>
+   <table class="table">
+    <tbody>
+      {% for i in cL %}
+        <tr>
+          {% for j in i %}
+            <td>{{j}}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+   </table>
+   <p>Bt</p>
+   <table class="table">
+    <tbody>
+      {% for i in cU %}
+        <tr>
+          {% for j in i %}
+            <td>{{j}}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+   </table>
+ </div>
+
+{% endblock %}
