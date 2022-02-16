@@ -5,6 +5,7 @@ import numpy as np
 import requests
 import scipy
 import scipy.linalg
+import scipy.sparse.linalg
 
 def daoHam(func, xval):
   x = sym.symbols('x')
@@ -206,8 +207,10 @@ def Newton(func, a, b, x, m, n):
   return res
 
 def lu(A):
-  A = scipy.array(A)
-  P, L, U = scipy.linalg.lu(A)
+  A = np.array(A)
+  slu = scipy.sparse.linalg.splu(A, permc_spec = "NATURAL", diag_pivot_thresh=0, options={"SymmetricMode":True})
+  L = slu.L.toarray()
+  U = slu.U.toarray()
 
   try:
     Lc = scipy.linalg.cholesky(A, lower=True)
@@ -420,6 +423,7 @@ def lu_cholesky():
         for i in range(level):
           for j in range(level):
             A[i][j] = float(request.form.get(str(i)+'-'+str(j)))
+        print(A)
         aL, aU, cL, cU = lu(A)
     return render_template('lucholesky.html', level=level, A=A, aL=aL, aU=aU, cL=cL, cU=cU,)
   except Exception as e:
