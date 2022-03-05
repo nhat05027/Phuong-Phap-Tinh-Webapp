@@ -254,7 +254,6 @@ def page_not_found(e):
 
 @app.route("/newton", methods=['GET', 'POST'])
 def newton():
-  return render_template('home.html')
   try:
     func = ""
     a = 0
@@ -291,7 +290,6 @@ def newton():
 
 @app.route("/lapdon", methods=['GET', 'POST'])
 def lapdon():
-  return render_template('home.html')
   try:
     func = ""
     a = 0
@@ -321,7 +319,6 @@ def lapdon():
 
 @app.route("/chiadoi", methods=['GET', 'POST'])
 def chiadoi():
-  return render_template('home.html')
   try:
     func = ""
     a = 0
@@ -340,7 +337,6 @@ def chiadoi():
   
 @app.route("/jacobi", methods=['GET', 'POST'])
 def jacob():
-  return render_template('home.html')
   try:
     B = []
     C = []
@@ -375,7 +371,6 @@ def jacob():
 
 @app.route("/gauss", methods=['GET', 'POST'])
 def gauss():
-  return render_template('home.html')
   try:
     B = []
     C = []
@@ -410,7 +405,6 @@ def gauss():
 
 @app.route("/lu-cholesky", methods=['GET', 'POST'])
 def lu_cholesky():
-  return render_template('home.html')
   try:
     A = []
     aL = []
